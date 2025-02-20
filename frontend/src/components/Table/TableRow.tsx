@@ -20,5 +20,8 @@ export const TableRow = ({ row }: TableRowProps) => (
     <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
       <Badge status={row.status} />
     </td>
+    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+      {row.customer.email}
+    </td>
   </tr>
 );

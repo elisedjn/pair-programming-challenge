@@ -9,6 +9,7 @@ interface Customer {
   firstName: string;
   id: string;
   lastName: string;
+  email?: string;
 }
 
 export interface Policy {

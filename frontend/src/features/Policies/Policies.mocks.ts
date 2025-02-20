@@ -3,6 +3,7 @@ import { rest } from 'msw';
 export const validCustomer = {
   firstName: 'Cyrillus',
   lastName: 'Biddlecombe',
+  email: 'CyrillusBiddlecombe@example.com',
 };
 
 export const policyMockResponse = [
