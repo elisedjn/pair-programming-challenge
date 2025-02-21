@@ -9,20 +9,25 @@ export async function getPolicies(req: Request, res: Response) {
 
   const or: Prisma.PolicyWhereInput = search
     ? {
-      OR: [
-        { provider: { contains: search as string, mode: 'insensitive' } },
-        {
-          customer: {
-            firstName: { contains: search as string, mode: 'insensitive' },
+        OR: [
+          { provider: { contains: search as string, mode: 'insensitive' } },
+          {
+            customer: {
+              firstName: { contains: search as string, mode: 'insensitive' },
+            },
           },
-        },
-        {
-          customer: {
-            lastName: { contains: search as string, mode: 'insensitive' },
+          {
+            customer: {
+              lastName: { contains: search as string, mode: 'insensitive' },
+            },
           },
-        },
-      ],
-    }
+          {
+            customer: {
+              email: { contains: search as string, mode: 'insensitive' },
+            },
+          },
+        ],
+      }
     : {};
 
   const policies = await prisma.policy.findMany({
@@ -42,6 +47,7 @@ export async function getPolicies(req: Request, res: Response) {
           firstName: true,
           lastName: true,
           dateOfBirth: true,
+          email: true,
         },
       },
     },

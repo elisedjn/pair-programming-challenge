@@ -7,6 +7,7 @@ export const userData: Prisma.CustomerCreateInput[] = [
     firstName: 'Cyrillus',
     lastName: 'Biddlecombe',
     dateOfBirth: '1978-12-03T06:33:17Z',
+    email: 'CyrillusBiddlecombe@example.com',
     policies: {
       create: {
         provider: 'BARMER',
@@ -20,6 +21,7 @@ export const userData: Prisma.CustomerCreateInput[] = [
     firstName: 'Brandy',
     lastName: 'Harbour',
     dateOfBirth: '1985-02-28T12:51:27Z',
+    email: 'BrandyHarbour@example.com',
     policies: {
       create: {
         provider: 'BARMER',
@@ -33,6 +35,7 @@ export const userData: Prisma.CustomerCreateInput[] = [
     firstName: 'Ailina',
     lastName: 'Harber',
     dateOfBirth: '1993-01-20T02:51:20Z',
+    email: 'AilinaHarber@example.com',
     policies: {
       create: {
         provider: 'AOK',
@@ -266,6 +269,8 @@ export const userData: Prisma.CustomerCreateInput[] = [
 ];
 
 async function main() {
+  await prisma.policy.deleteMany();
+  await prisma.customer.deleteMany();
   console.log(`Start seeding ...`);
   for (const u of userData) {
     const user = await prisma.customer.create({

@@ -1,7 +1,7 @@
-import request from "supertest";
-import * as http from "http";
-import { createExpressApp, prisma } from "../src/server";
-import { Prisma } from "@prisma/client";
+import request from 'supertest';
+import * as http from 'http';
+import { createExpressApp, prisma } from '../src/server';
+import { Prisma } from '@prisma/client';
 
 describe('app (e2e)', () => {
   let server: http.Server;
@@ -57,7 +57,9 @@ describe('app (e2e)', () => {
         },
       },
     ];
-    const promises = customers.map((customer) => prisma.customer.create({ data: customer }));
+    const promises = customers.map((customer) =>
+      prisma.customer.create({ data: customer })
+    );
     await Promise.all(promises);
 
     const response = await request(server).get('/policies');
@@ -97,13 +99,64 @@ describe('app (e2e)', () => {
       },
     ];
 
-    const promises  = customers.map((customer) => prisma.customer.create({ data: customer }));
+    const promises = customers.map((customer) =>
+      prisma.customer.create({ data: customer })
+    );
     await Promise.all(promises);
 
-    const response = await request(server).get('/policies?search=barmer&status=active');
+    const response = await request(server).get(
+      '/policies?search=barmer&status=active'
+    );
     expect(response.status).toBe(200);
 
     const { body: policies } = response;
     expect(policies.length).toBe(1);
+  });
+
+  it('/policies (GET) should return status code 200 and 1 policy with email associated', async () => {
+    const email = 'CyrillusBiddlecombe@example.com';
+    const customers: Prisma.CustomerCreateInput[] = [
+      {
+        firstName: 'Cyrillus',
+        lastName: 'Biddlecombe',
+        dateOfBirth: '1978-12-03T06:33:17Z',
+        email,
+        policies: {
+          create: {
+            provider: 'BARMER',
+            insuranceType: 'HEALTH',
+            status: 'ACTIVE',
+            startDate: '2017-04-26T05:32:06Z',
+          },
+        },
+      },
+      {
+        firstName: 'Brandy',
+        lastName: 'Harbour',
+        dateOfBirth: '1985-02-28T12:51:27Z',
+        policies: {
+          create: {
+            provider: 'TK',
+            insuranceType: 'HEALTH',
+            status: 'ACTIVE',
+            startDate: '2013-01-13T04:52:15Z',
+          },
+        },
+      },
+    ];
+
+    const promises = customers.map((customer) =>
+      prisma.customer.create({ data: customer })
+    );
+    await Promise.all(promises);
+
+    const response = await request(server).get(
+      `/policies?search=${email}&status=active`
+    );
+    expect(response.status).toBe(200);
+
+    const { body: policies } = response;
+    expect(policies.length).toBe(1);
+    expect(policies[0].customer.email).toBe(email);
   });
 });
