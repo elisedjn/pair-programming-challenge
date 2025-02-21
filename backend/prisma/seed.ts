@@ -269,6 +269,8 @@ export const userData: Prisma.CustomerCreateInput[] = [
 ];
 
 async function main() {
+  await prisma.policy.deleteMany();
+  await prisma.customer.deleteMany();
   console.log(`Start seeding ...`);
   for (const u of userData) {
     const user = await prisma.customer.create({

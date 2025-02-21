@@ -1,4 +1,4 @@
-import { createExpressApp } from "./server";
+import { createExpressApp } from './server';
 
 async function main() {
   const app = await createExpressApp();
